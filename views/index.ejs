@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarantalera</title>
+    <link rel="stylesheet" href="/style.css">
+    <!-- <link rel="shortcut icon" type="image/jpg" href='favicon.ico'/> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Water+Brush&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="header">
+        <a class="logo" href="/">Tarantalera</a>
+        <nav class="mainNav">
+            <ul>
+                <li class="navItem">
+                    <a href="/originalDesigns" class="nav_link">Original Designs</a>
+                </li>
+                <li class="navItem">
+                    <a href="/paperLamps" class="nav_link">Paper Lamps</a>
+                </li>
+                <li class="navItem">
+                    <a href="/handmadeJewellery" class="nav_link">Handmade Jewellery</a>
+                </li>
+                <li class="navButton">
+                    <%if(user){%>
+                        <%=locals.name%>
+                        <form action="/logout?_method=DELETE" method="POST">
+                            <button type="submit">Log Out</button>
+                        </form>
+                    <%}else{%>        
+                        <a href="/login" class="button">Sign in</a>
+                    <%}%>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <section class="landing">
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <div class="numbertext">1 / 3</div>
+            <img src="images/img1.png" alt="Colourful bracelets" style="width:100%">
+            <div class="text">colourful bracelets</div>
+        </div>
+        <div class="mySlides fade">
+            <div class="numbertext">2 / 3</div>
+            <img src="images/img2.png" alt="Parrot paperlamp" style="width:100%">
+            <div class="text">parrot paperlamp</div>
+        </div>
+        <div class="mySlides fade">
+            <div class="numbertext">3 / 3</div>
+            <img src="images/img3.png" alt="Purple daisies painting" style="width:100%">
+            <div class="text">daisy painting</div>
+        </div>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <span class="vertLine"></span>
+    <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia praesentium nulla consectetur ab odit dignissimos, quidem pariatur accusamus modi unde ipsa reprehenderit perspiciatis, laudantium natus delectus! Est tempora vel explicabo.</p>
+</section>
+<span class="bot-bar"></span>
+<section class="itemList">
+    <% for(let i = 0; i < data.length;i++) { %>
+        <a href="<%=`item/${data[i].id}?id=${data[i].id}`%>" class="item">
+            <img src="<%=data[i].img%>" alt="elements">
+            <div class="details">
+                <i><%=data[i].price%>$</i>
+                <h3><%=data[i].title%></p>
+            </div>
+        </a>
+    <%}; %>
+    
+</section>
+<section class="comment-section">
+    <div class="comments">
+            <%for(let i = 0; i < comments.length; i++){%>
+                <div class="single-comment">
+                    <h3><%=comments[i].username%></h3>
+                    <p><%=comments[i].date.toISOString().slice(0, 10)%></p>
+                    <p><%=comments[i].text%></p>
+                </div>
+            <%}; %>
+            <%if(user){%>
+                <form method="post" action="/newComment" class="single-comment">
+                    <input type="text" name="myComment" class="myComment">
+                    <input type="submit" value="Add Comment" class="myCommentBtn">
+                </form>
+            <%}%>
+    </div>
+</section>
+<script defer>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+    
+    // Next/previous controls
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+    
+    // Thumbnail image controls
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        let dots = document.getElementsByClassName("dot");
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";
+    }
+</script>
+<%- include("headerFooter/footer") %>

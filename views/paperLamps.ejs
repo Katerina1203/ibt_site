@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarantalera</title>
+    <link rel="stylesheet" href="/style.css">
+    <!-- <link rel="shortcut icon" type="image/jpg" href='favicon.ico'/> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Water+Brush&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="header">
+        <a class="logo" href="/">Tarantalera</a>
+        <nav class="mainNav">
+            <ul>
+                <li class="navItem">
+                    <a href="/originalDesigns" class="nav_link">Original Designs</a>
+                </li>
+                <li class="navItem">
+                    <a href="/paperLamps" class="nav_link">Paper Lamps</a>
+                </li>
+                <li class="navItem">
+                    <a href="/handmadeJewellery" class="nav_link">Handmade Jewellery</a>
+                </li>
+                <li class="navButton">
+                    <%if(user){%>
+                        <%=locals.name%>
+                        <form action="/logout?_method=DELETE" method="POST">
+                            <button type="submit">Log Out</button>
+                        </form>
+                    <%}else{%>        
+                        <a href="/login" class="button">Sign in</a>
+                    <%}%>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <section class="itemList" id="itemListId">
+        <% for(let i = 0; i < data.length;i++) { %>
+            <a href="<%=`item/${data[i].id}?id=${data[i].id}`%>" class="item">
+                <img src="<%=data[i].img%>" alt="elements">
+                <div class="details">
+                    <i><%=data[i].price%>$</i>
+                    <h3><%=data[i].title%></p>
+                </div>
+            </a>
+        <%}; %>    
+    </section>
+</html>      

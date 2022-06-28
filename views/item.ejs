@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarantalera</title>
+    <link rel="stylesheet" href="/style.css">
+    <!-- <link rel="shortcut icon" type="image/jpg" href='favicon.ico'/> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Water+Brush&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="header">
+        <a class="logo" href="/">Tarantalera</a>
+        <nav class="mainNav">
+            <ul>
+                <li class="navItem">
+                    <a href="/originalDesigns" class="nav_link">Original Designs</a>
+                </li>
+                <li class="navItem">
+                    <a href="/paperLamps" class="nav_link">Paper Lamps</a>
+                </li>
+                <li class="navItem">
+                    <a href="/handmadeJewellery" class="nav_link">Handmade Jewellery</a>
+                </li>
+                <li class="navButton">
+                    <%if(user){%>
+                        <%=locals.name%>
+                        <form action="/logout?_method=DELETE" method="POST">
+                            <button type="submit">Log Out</button>
+                        </form>
+                    <%}else{%>        
+                        <a href="/login" class="button">Sign in</a>
+                    <%}%>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="section">
+            <div class="right">
+                <img src="<%=`/${data.img}`%>" alt="image">
+            </div>
+            <div class="left">
+                <h1 class="title"><%=data.title%></h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste totam tempora velit animi laborum voluptatibus laudantium quibusdam soluta ipsam enim. Excepturi veniam iusto nesciunt quasi, eligendi sint distinctio tempore adipisci.</p>
+                <div>
+                    <p name="price" class="price"><%=data.price%></p>
+                    <button class="openFormButton" type="submit">Buy now</button>
+                </div>
+            </div>
+    </div>
+    <div class="blockField hidden"></div>
+    <form method="post" action="/item" class="buyForm hidden">
+        <p>You have decided to purchase this product.If you like to continue with this purchase, please enter your shipping address and phone number below.</p>
+        <input type="text" class="clientName" name="name" placeholder="your name">
+        <input type="text" class="clientAddres" name="addres" placeholder="your addres">
+        <input type="text" class="clientPhone" name="phone" placeholder="phone">
+        <input type="submit" value="submit" class="submitBtn">
+    </form>
+    <script>
+        const openFormBTN = document.querySelector('.openFormButton')
+        const form = document.querySelector('form')
+        const blockField = document.querySelector('.blockField')
+        const submitBtn = document.querySelector('.submitBtn')
+        const price = document.querySelector('.price')
+        const title = document.querySelector('.title')
+        const clientName = document.querySelector('.clientName')
+        const clientAddres = document.querySelector('.clientAddres')
+        const clientPhone = document.querySelector('.clientPhone')
+        
+        console.log(price.innerHTML);
+
+        openFormBTN.onclick = (e)=>{
+            hiddenToggle(e)
+        }
+
+        blockField.onclick = (e)=>{
+            hiddenToggle(e)
+        }
+
+        submitBtn.onclick = async (e)=>{
+            e.preventDefault()
+            try {
+                await fetch('http://localhost:5000/buy',{
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        price: price.innerHTML,
+                        title: title.innerHTML,
+                        clientName: clientName.value,
+                        clientAddres: clientAddres.value,
+                        clientPhone: clientPhone.value
+                    })
+                })
+                
+            } catch (error) {
+                console.log(error);
+            }
+             window.location.replace("http://localhost:5000/success");
+            window.location.href = "http://localhost:5000/success";
+        }
+
+        function hiddenToggle(e){
+            e.preventDefault();
+            blockField.classList.toggle('hidden')
+            form.classList.toggle('hidden')
+        }
+
+    </script>
+</body>
+</html>
